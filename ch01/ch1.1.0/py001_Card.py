@@ -6,9 +6,10 @@ Card = collections.namedtuple('Card', ['rank', 'suit'])
 
 class FrenchDeck:
     ranks = [str(n) for n in range(2, 11)] + list('JQKA')
-    suits = 'spades diamonds clubs hearts'.split(' ')
+    suits = 'spades diamonds clubs hearts'.split()
 
     def __init__(self):
+        # 两个for的时候，注意顺序
         self._cards = [Card(rank, suit) for suit in self.suits
                        for rank in self.ranks]
 
@@ -20,11 +21,25 @@ class FrenchDeck:
 
 
 if __name__ == '__main__':
-    french = FrenchDeck()
-    print(len(french))
-    print(french[0])
-    print(french[1])
+    deck = FrenchDeck()
+    print(len(deck))
 
-    print(choice(french))
-    print(choice(french))
-    print(choice(french))
+    print(deck[0])
+    print(deck[1])
+
+    print(choice(deck))
+    print(choice(deck))
+    print(choice(deck))
+
+    # 因为__getitem__方法把[]交给了列表，所以，支持切片
+    print(deck[:3])
+    print(deck[12::13])
+
+    # 只要实现了__getitem__方法，就是可迭代的了
+    for card in deck:
+        print(card)
+
+    print('=' * 30)
+    # 反向迭代也可以
+    for card in reversed(deck):
+        print(card)
