@@ -7,6 +7,7 @@ Card = collections.namedtuple('Card', ['rank', 'suit'])
 class FrenchDeck:
     ranks = [str(n) for n in range(2, 11)] + list('JQKA')
     suits = 'spades diamonds clubs hearts'.split()
+    suit_values = dict(spades=3, hearts=2, diamonds=1, clubs=0)
 
     def __init__(self):
         # 两个for的时候，注意顺序
@@ -18,6 +19,10 @@ class FrenchDeck:
 
     def __getitem__(self, position):
         return self._cards[position]
+
+    def spades_high(self, card):
+        rank_value = self.ranks.index(card.rank)
+        return rank_value * len(self.suit_values) + self.suit_values[card.suit]
 
 
 if __name__ == '__main__':
@@ -42,4 +47,12 @@ if __name__ == '__main__':
     print('=' * 30)
     # 反向迭代也可以
     for card in reversed(deck):
+        print(card)
+
+    # 没有实现__contains__方法，in就会从头到尾迭代搜索
+    print(Card(rank='2', suit='hearts') in deck)
+    print(Card(rank='1', suit='hearts') in deck)
+
+    #
+    for card in sorted(deck, key=deck.spades_high):
         print(card)
